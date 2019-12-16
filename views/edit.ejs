@@ -1,0 +1,26 @@
+<%- include("./partials/header")%>
+
+<div class="ui main text container segment">
+	<div class="ui huge header">
+		Edit <%=result.title%>
+	</div>
+<!-- ?_method=PUT is method override-->
+	<form class="ui form" action="/blogs/<%=result._id%>?_method=PUT", method="POST">
+		<div class="field">
+			<lable>Title</lable>
+			<input type="text"	name="blog[title]" value="<%=result.title%>">
+		</div>
+		<div class="field">
+			<lable>Image</lable>
+			<input type="text"	name="blog[image]" value="<%=result.image%>">
+		</div>
+		<div class="field">
+			<lable>Blog Content</lable>
+			<textarea name="blog[body]"><%=result.body%></textarea>
+		</div>
+  		<button class="ui inverted primary button">Submit</button>
+
+	</form>
+</div>
+
+<%- include("./partials/footer")%>
