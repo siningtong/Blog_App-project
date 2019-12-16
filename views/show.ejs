@@ -9,7 +9,7 @@
 				<span><%=result.created.toDateString()%></span>
 			</div>
 			<div class="description">
-				<p><%= result.body%></p>
+				<p><%- result.body %></p>
 			</div>
 			<a class="ui orange basic button" href="/blogs/<%= result._id %>/edit">Edit</a>
 			<form id="delete" action="/blogs/<%= result._id %>?_method=DELETE" method="POST">

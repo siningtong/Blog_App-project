@@ -1,17 +1,20 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const app = express()
-const mongoose = require('mongoose')
-const PORT = 3000
+const expressSanitizer = require("express-sanitizer");
+const app = express();
+const mongoose = require('mongoose');
+const PORT = 3000;
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true,useFindAndModify: false})
+mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true,useFindAndModify: false});
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressSanitizer());
 app.use(express.static("public"));
 app.use(methodOverride("_method"))
+
 //mongoose modal config
 const blogSchema = new mongoose.Schema({
 	title:String,
@@ -40,7 +43,7 @@ app.get('/blogs/new',(req,res)=>{
 })
 //create route
 app.post('/blogs',(req,res)=>{
-	// console.log(req.body)
+	req.body.blog.body = req.sanitize(req.body.blog.body)
 	blog.create(req.body.blog,(err,newlyCreatedBlog)=>{
 		err?console.log(err):res.redirect('/blogs')
 	})
@@ -62,6 +65,7 @@ app.get('/blogs/:id/edit',(req,res)=>{
 })
 //update route
 app.put('/blogs/:id',(req,res)=>{
+		req.body.blog.body = req.sanitize(req.body.blog.body)
 	blog.findByIdAndUpdate(req.params.id,req.body.blog,(err,updatedBlog)=>{
 		err?res.redirect("/blogs"):res.redirect(`\/blogs\/${req.params.id}`)
 	})
